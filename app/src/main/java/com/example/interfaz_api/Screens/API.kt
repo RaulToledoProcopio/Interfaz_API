@@ -1,5 +1,6 @@
 package com.example.interfaz_api.Screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,6 +22,8 @@ import com.example.interfaz_api.R
 
 @Composable
 fun ApiScreen(navController: NavController) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,33 +76,10 @@ fun ApiScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Text(
-                text = "GET /videojuegos",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            Text(
-                text = "GET /videojuegos/{id}",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            Text(
-                text = "PUT /usuarios/{id}",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            Text(
-                text = "DELETE /biblioteca/{id_biblioteca}",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            ApiRow("GET /videojuegos", "Has obtenido la lista de todos los videojuegos", context)
+            ApiRow("GET /videojuegos/{id}", "Has obtenido los detalles de un videojuego específico", context)
+            ApiRow("PUT /usuarios/{id}", "Información de usuario actualizada", context)
+            ApiRow("DELETE /biblioteca/{id_biblioteca}", "Has eliminado un juego de la biblioteca", context)
         }
 
         Box(
@@ -107,6 +88,32 @@ fun ApiScreen(navController: NavController) {
                 .fillMaxWidth()
         ) {
             BottomNavigationBar(navController)
+        }
+    }
+}
+
+@Composable
+fun ApiRow(endpoint: String, message: String, context: android.content.Context) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = endpoint,
+            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1f)
+        )
+
+        Button(
+            onClick = {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+        ) {
+            Text(text = "Usar endpoint", color = Color.White)
         }
     }
 }
